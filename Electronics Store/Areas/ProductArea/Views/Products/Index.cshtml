@@ -1,0 +1,120 @@
+﻿@using Electronics_Store.Helpers
+@model PaginatedList<Electronics_Store.Areas.ProductArea.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Areas/ProductArea/Views/Shared/_Layout.cshtml";
+}
+
+<h1>All Products</h1>
+
+<p>
+    <a class="btn btn-success btn-outline-primary text-white" asp-action="Create">Create New</a>
+</p>
+
+<div class="row mb-4">
+    <div class="col-lg-2 d-flex flex-row">
+        <div class=" d-flex justify-content-center align-items-center">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter
+                </button>
+                <div class="dropdown-menu border-2 border-primary" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-availability="available" asp-route-filteredBy="available">Available in stock</a>
+                    <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-availability="unavailable" asp-route-filteredBy="unavailable">Unavailable in stock</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (ViewData["TotalItems"] != null)
+    {
+        <div class="col-lg-2 text-center align-items-center d-flex justify-content-center">
+            <h6 class="m-0 pl-2">Total items: @ViewData["TotalItems"]</h6>
+        </div>
+    }
+    <div class="col-lg-8 d-flex justify-content-end">
+        <form asp-action="Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" value="Search" class="btn btn-default" /> |
+                    <a class="text-decoration-none" asp-action="Index">Back to Full List</a>
+                </p>
+                @if (TempData["NoProductsFoundOnFilter"] != null)
+                {
+                    <p id="msg" class="text-warning">
+                        @TempData["NoProductsFoundOnFilter"]
+                    </p>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table bg-light">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Is Active
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    asp-route-filteredBy="@ViewData["filtered_by"]"
+   class="btn border border-secondary btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    asp-route-filteredBy="@ViewData["filtered_by"]"
+   class="btn border border-secondary btn-default @nextDisabled">
+    Next
+</a>
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+            $("#msg").fadeOut();
+        }, 3500);
+    </script>
+}

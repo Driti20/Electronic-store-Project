@@ -1,0 +1,12 @@
+﻿@using Electronics_Store.Areas.ProductArea.Models
+@model IEnumerable<Main_Category>
+
+@foreach (var category in Model)
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link text-dark" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria--haspopup="true" aria-expanded="false">
+            @category.Name
+        </a>
+        @await Component.InvokeAsync("AllCategories", new { mainCategory = category.Id })
+    </li>
+}

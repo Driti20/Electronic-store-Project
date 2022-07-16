@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Electronics_Store.Helpers
+@model PaginatedList<IdentityUser>
+
+@{
+    ViewData["Title"] = "All Users";
+}
+
+
+<div class="container">
+    <h1>All Users</h1>
+
+    @if (Model.Any())
+    {
+        <a asp-action="Register" asp-controller="Account" asp-area="Identity" class="btn btn-success mb-3 btn-outline-primary text-white" style="width:auto">
+            Add new user
+        </a>
+
+        <form asp-action="ListUsers" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" value="Search" class="btn btn-default" /> |
+                    <a class="text-decoration-none" asp-action="ListUsers">Back to Full List</a>
+                </p>
+                @if (TempData["NoUsersFoundOnFilter"] != null)
+                {
+                    <p id="msg" class="text-warning">
+                        @TempData["NoUsersFoundOnFilter"]
+                    </p>
+                }
+            </div>
+        </form>
+
+        <table class="table bg-light">
+            <thead>
+                <tr>
+                    <th style="text-align: center">
+                        <a asp-action="ListUsers" asp-route-sortOrder="@ViewData["UsernameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">UserName</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => user.UserName)
+                        </td>
+                        <td align="right">
+                            <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
+                                <a asp-action="EditUser" asp-controller="AdminHome" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+
+                                <span id="confirmDeleteSpan_@user.Id" style="display: none">
+                                    <span>Are you sure you want to delete?</span>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                    <a href="#" class="btn btn-primary" onclick="confirmDelete('@user.Id', false)">No</a>
+                                </span>
+
+                                <span id="deleteSpan_@user.Id">
+                                    <a href="#" class="btn btn-danger" onclick="confirmDelete('@user.Id', true)">Delete</a>
+                                </span>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+        <a asp-action="ListUsers"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn border border-secondary btn-default @prevDisabled">
+            Previous
+        </a>
+        <a asp-action="ListUsers"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn border border-secondary btn-default @nextDisabled">
+            Next
+        </a>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No users created yet
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Use the button below to create a user
+                </h5>
+                <a class="btn btn-primary" style="width:auto" asp-controller="Account" asp-action="Register" asp-area="Identity">
+                    Add new user
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+}
+<script>
+    setTimeout(function () {
+        $("#msg").fadeOut();
+    }, 3500);
+</script>

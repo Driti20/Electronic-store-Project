@@ -1,0 +1,185 @@
+﻿@using Electronics_Store.Areas.ProductArea.Models
+@using Electronics_Store.Helpers
+@model PaginatedList<Product>
+
+@{ 
+    ViewData["Title"] = "Products";
+}
+
+@if (Model.Any())
+{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+    <div class="container mt-4">
+        @if (ViewData["Category"] != null)
+        {
+            <h3 class="text-break mb-5">@ViewData["Category"]</h3>
+        }
+        <div class="row">
+            <div class="col-2 bg-light">
+                <ul class="nav flex-column bg-white mb-0">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-dark bg-light text-break border border-top-0 border-left-0 border-right-0">
+                            Price
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-dark bg-light text-break border border-top-0 border-left-0 border-right-0">
+                            Brand
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-dark bg-light text-break border border-top-0 border-left-0 border-right-0">
+                            Color
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-10">
+                <div class="row mb-4">
+                    <div class="col-lg-4">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sort items
+                            </button>
+                            <div class="dropdown-menu border-2 border-primary" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="Name" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">From A-Z</a>
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="name_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">From Z-A</a>
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="Price" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">Price Ascending</a>
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="price_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">Price Descending</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex justify-content-end">
+                        <form asp-action="ProductsFromCategory" method="get">
+                            <div class="form-actions no-color">
+                                <p>
+                                    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Search" />
+                                    <input type="submit" value="Search" class="btn btn-default" />
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @if (ViewData["filtered_by"] != null)
+                {
+                    <div class="row mb-2">
+                        <h5 class="pl-3">Filtered products related to:  "@ViewData["filtered_by"]"</h5>
+                        <a asp-action="ProductsFromCategory" asp-route-searchString=" " class="text-secondary text-decoration-none ml-2">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                }
+                <div class="row">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-lg-3 col-md-4 mt-4 col-sm-5">
+                            <div class="card">
+                                <img class="card-img-top" src="/ImageOfProduct/@product.Image" alt="image">
+                                <div class="card-body">
+                                    @if (product.Name.Length > 35)
+                                    {
+                                        string product_shorter = new string(product.Name.Take(35).ToArray());
+                                        <h6 class="card-title">@product_shorter...</h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="card-title">@product.Name</h6>
+                                    }
+                                    <h5 class="card-text">@product.Price €</h5>
+                                    <a asp-area="Client" asp-controller="ClientSide" asp-action="Product" asp-route-id="@product.Id" class="btn btn-primary">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row mt-5 d-flex justify-content-center">
+                    <a asp-action="ProductsFromCategory"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-filteredBy="@ViewData["filtered_by"]"
+                       class="btn border border-secondary mr-2 btn-default @prevDisabled">
+                        Previous
+                    </a>
+                    <a asp-action="ProductsFromCategory"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-filteredBy="@ViewData["filtered_by"]"
+                       class="btn border border-secondary ml-2 btn-default @nextDisabled">
+                        Next
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (ViewData["NoFilteredProducts"] != null)
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-2">
+                <ul class="nav flex-column bg-white mb-0" style="margin-top: 15%">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-dark bg-light">
+                            Price
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-dark bg-light">
+                            Brand
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-dark bg-light">
+                            Color
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-10">
+                <div class="row mb-4">
+                    <div class="col-lg-4">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sort items
+                            </button>
+                            <div class="dropdown-menu border-2 border-primary" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="Name" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">From A-Z</a>
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="name_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">From Z-A</a>
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="Price" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">Price Ascending</a>
+                                <a class="dropdown-item" asp-action="ProductsFromCategory" asp-route-sortOrder="price_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-filteredBy="@ViewData["filtered_by"]">Price Descending</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex justify-content-end">
+                        <form asp-action="ProductsFromCategory" method="get">
+                            <div class="form-actions no-color">
+                                <p>
+                                    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Search" />
+                                    <input type="submit" value="Search" class="btn btn-default" />
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row pl-3 mt-5">
+                    <h5>@ViewData["NoFilteredProducts"]  |  &nbsp&nbsp</h5>
+                    <a asp-action="ProductsFromCategory" class="text-decoration-none">Back to Full List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="margin-top container">
+        <h4 class="text-center">No products available from this category!</h4>
+    </div>
+}
+
+
+
+<script src="~/js/site.js" asp-append-version="true"></script>

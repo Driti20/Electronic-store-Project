@@ -1,0 +1,11 @@
+﻿@using Electronics_Store.Areas.ProductArea.Models
+@model IEnumerable<Category>
+
+<div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+    @foreach (var category in Model)
+    {
+        <a class="dropdown-item" asp-area="Client" asp-controller="ClientSide" asp-action="ProductsFromCategory" asp-route-id="@category.Id">
+            @category.Name
+        </a>
+    }
+</div>

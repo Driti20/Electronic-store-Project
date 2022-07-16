@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container">
+    <div>
+        @await Component.InvokeAsync("SlideShow")
+    </div>
+    <div class="gradient-blue-white pt-3 pb-3 align-items-center">
+        <h5 class="p-0 m-0 pl-3 text-white">Recommended Products</h5>
+    </div>
+    <div class="row justify-content-around">
+        <div class="col-lg-11 col-md-12">
+            <div class="row">
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/sale-offer.jpg" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">20% Off</h5>
+                            <p class="card-text">Samsung A52</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/VivoImg.jpg" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">40% Off</h5>
+                            <p class="card-text">Samsung Galaxy S20 FE</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/inter_image.png" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">35% Off</h5>
+                            <p class="card-text">Apple iPhone 11</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/VivoImg.jpg" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">20% Off</h5>
+                            <p class="card-text">Samsung Galaxy Note 9</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/inter_image.png" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">15% Off</h5>
+                            <p class="card-text">Samsung A52</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/sale-offer.jpg" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">20% Off</h5>
+                            <p class="card-text">Samsung A52</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/VivoImg.jpg" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">20% Off</h5>
+                            <p class="card-text">Samsung Galaxy Note 9</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="card text-center">
+                        <img src="~/images/inter_image.png" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="text-danger card-title">15% Off</h5>
+                            <p class="card-text">Samsung A52</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>

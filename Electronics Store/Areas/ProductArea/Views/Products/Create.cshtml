@@ -1,0 +1,89 @@
+﻿@model Electronics_Store.Areas.ProductArea.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/ProductArea/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ImageFile" class="control-label"></label>
+                        <input asp-for="ImageFile" accept="image/* " class="form-control" />
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                        @if (ViewData["ImageNotNull"] != null)
+                        {
+                            <span class="text-danger">@ViewData["ImageNotNull"]</span>
+                        }
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Weight" class="control-label"></label>
+                        <input asp-for="Weight" class="form-control" />
+                        <span asp-validation-for="Weight" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-1">
+
+                </div>
+                <div class="col-5">
+                    <div class="form-group">
+                        <label asp-for="ColorId" class="control-label"></label>
+                        <select asp-for="ColorId" class="form-control" asp-items="ViewBag.ColorId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BrandId" class="control-label"></label>
+                        <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaterialId" class="control-label"></label>
+                        <select asp-for="MaterialId" class="form-control" asp-items="ViewBag.MaterialId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="WarrantyId" class="control-label"></label>
+                        <select asp-for="WarrantyId" class="form-control" asp-items="ViewBag.WarrantyId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                        <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

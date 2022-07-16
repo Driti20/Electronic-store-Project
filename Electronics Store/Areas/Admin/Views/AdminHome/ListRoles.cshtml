@@ -1,0 +1,115 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Electronics_Store.Helpers
+@model PaginatedList<IdentityRole>
+
+@{
+    ViewData["Title"] = "Roles List";
+}
+
+
+<div class="container">
+    <h1>All Roles</h1>
+
+    @if (Model.Any())
+    {
+        <a class="btn btn-success mb-3 btn-outline-primary text-white" style="width:auto" asp-action="CreateRole" asp-controller="AdminHome">Add new role</a>
+
+        <form asp-action="ListRoles" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" value="Search" class="btn btn-default" /> |
+                    <a class="text-decoration-none" asp-action="ListRoles">Back to Full List</a>
+                </p>
+                @if (TempData["NoRolesFoundOnFilter"] != null)
+                {
+                    <p id="msg" class="text-warning">
+                        @TempData["NoRolesFoundOnFilter"]
+                    </p>
+                }
+            </div>
+        </form>
+
+        <table class="table bg-light">
+            <thead>
+                <tr>
+                    <th style="text-align: center">
+                        <a asp-action="ListRoles" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => role.Name)
+                        </td>
+                        <td align="right">
+                            <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+                                <a class="btn btn-primary" asp-action="EditRole" asp-controller="AdminHome" asp-route-id="@role.Id">Edit</a>
+                                <span id="confirmDeleteSpan_@role.Id" style="display: none">
+                                    <span>Are you sure you want to delete?</span>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                    <a href="#" class="btn btn-primary" onclick="confirmDelete('@role.Id', false)">No</a>
+                                </span>
+
+                                <span id="deleteSpan_@role.Id">
+                                    <a href="#" class="btn btn-danger" onclick="confirmDelete('@role.Id', true)">Delete</a>
+                                </span>
+                            </form>
+                            @if (TempData["RoleHasUser"] != null && role.Id == TempData["RoleId"].ToString())
+                            {
+                                <br />
+                                <h6 class="text-danger">@TempData["RoleHasUser"]</h6>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+        <a asp-action="ListRoles"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn border border-secondary btn-default @prevDisabled">
+            Previous
+        </a>
+        <a asp-action="ListRoles"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn border border-secondary btn-default @nextDisabled">
+            Next
+        </a>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No roles created yet
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Press the button below to create a role
+                </h5>
+                <a class="btn btn-primary" style="width:auto" asp-controller="AdminHome" asp-action="CreateRole">Create Role</a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+}
+
+<script>
+    setTimeout(function () {
+        $("#msg").fadeOut();
+    }, 3500);
+</script>

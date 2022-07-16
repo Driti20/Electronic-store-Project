@@ -1,0 +1,85 @@
+﻿@model Electronics_Store.Areas.ProductArea.Models.Product
+
+@{
+    ViewData["Title"] = "Product";
+}
+
+<div class="container">
+    <div class="col-12">
+        <h3 class="pb-5 pt-3">@Model.Name</h3>
+        <div class="row pb-5">
+            <div class="col-lg-6 col-md-5">
+                <img src="~/ImageOfProduct/@Model.Image" class="col-lg-12 product-image" />
+            </div>
+            <div class="col-lg-1">
+
+            </div>
+            <div class="col-lg-5 col-md-4">
+                <h5 class="pb-4">@Model.Name</h5>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-5">
+                        <p>Price: </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <p>@Model.Price €</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-5">
+                        <p>Color: </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <p>@Model.Color.Name</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-5">
+                        <p>Brand: </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <p>@Model.Brand.Name</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-5">
+                        <p>Material: </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <p>@Model.Material.Name</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-5">
+                        <p>Weight: </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <p>@Model.Weight kg</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 row">
+                    <div class="col-lg-5">
+                        <p>Warranty duration: </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <p>@Model.Warranty.Duration years</p>
+                    </div>
+                </div>
+                @if (ViewData["AvailableInStock"] != null)
+                {
+                    <div class="col-lg-12 row">
+                        <div class="col-lg-5">
+                            <p>Availability: </p>
+                        </div>
+                        <div class="col-lg-5">
+                            <p>@ViewData["AvailableInStock"]</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div>
+            <h4>Product Description: </h4>
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>
